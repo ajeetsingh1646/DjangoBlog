@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+    {% block content %}
+        <div class="col-sm-6 col-sm-offset-3">
+        <h1>{{ title }}</h1>
+         <form method="post" enctype="multipart/form-data">
+             {% csrf_token %} <!-- #for security so no other website post in your form -->
+            {{ form1.as_p }}
+            <input type="submit" class=" btn btn-default" value="Post form">
+            <input type="reset" class=" btn btn-danger" value="reset">
+
+        </form>
+        </div>
+    {% endblock content %}

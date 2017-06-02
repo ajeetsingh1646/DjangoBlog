@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+    {% block content %}      <!-- ending of block -->
+        <div class="col-sm-8 col-sm-offset-2"><center><br>
+            <form method="GET" class = "form-inline" action="">
+                <input type="text" class="form-control" id="exampleInputName2" name="q"
+                       placeholder="Search query" value="{{request.GET.q}}"/>
+                <input type="submit" class="btn btn-warning" value="Search" />
+            </form></center><br>
+            {% for obj in object_list %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="thumbnail">
+                        {% if obj.image %}
+                            <img src="{{ obj.image.url }}" class="img-responsive" />
+                        {% endif %}
+                        <div class="caption">
+                            {% if obj.draft %}<h3>Staff Only: Draft</h3>{% endif %}
+                            {% if obj.publish > today %}
+                            <h3>Staff Only: Future Post </h3>{% endif %}
+                            <h3><a href="{{ obj.get_absolute_url }}">{{obj.title}}</a><br>
+                                <small>{{obj.timestamp}}</small></h3>
+                                {% if instance.user.get_full_name %}
+                                    <p>Author: {{instance.user.get_full_name}}</p>
+                                {% endif %}
+                            <p>{{obj.content|linebreaks|truncatechars:100}}</p>
+                            <p><a href="{{ obj.get_absolute_url }}"
+                                  class="btn btn-info" role="button" >View</a></p>
+                        </div>
+                    </div>
+                </div>
+            <hr>
+            </div>
+            {% endfor %}
+            <!-- Paginator -->
+            <nav aria-label="Page navigation" id="div1">
+              <ul class="pager">
+                <li>
+                    {% if object_list.has_previous %}
+                        <a aria-label="Previous" href="?{{page_request_var}}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}"><span aria-hidden="true">«</span></a>
+                    {% endif %}
+                </li>
+                <li>
+                    <span class="current">
+                     Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}
+                    </span></li>
+
+                <li>
+                    {% if object_list.has_next %}
+                        <a aria-label="Next" href="?{{page_request_var}}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}"><span aria-hidden="true">»</span></a>
+                    {% endif %}
+
+                </li>
+              </ul>
+            </nav>
+
+{% include "footer.html" %}
+    {% endblock content %}       <!-- ending of block -->
+            
